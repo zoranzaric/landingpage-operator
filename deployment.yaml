@@ -18,6 +18,7 @@ spec:
       containers:
         - name: landingpage-operator
           image: repository.int.compax.at:5001/landingpage-operator:master
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
       imagePullSecrets:
