@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landingpage-operator
+  labels:
+    app: landingpage-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: landingpage-operator
+  template:
+    metadata:
+      labels:
+        app: landingpage-operator
+    spec:
+      containers:
+        - name: landingpage-operator
+          image: repository.int.compax.at:5001/landingpage-operator:master
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+      - name: regcred
+      serviceAccount: landingpage-operator

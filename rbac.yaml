@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: landingpage-operator
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: landingpage-operator
+rules:
+  - apiGroups: [""]
+    resources:
+      - namespaces
+    verbs:
+      - list
+      - get
+      - watch
+      - update
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: landingpage-operator
+subjects:
+  - kind: ServiceAccount
+    name: landingpage-operator
+    namespace: landingpage
+roleRef:
+  kind: ClusterRole
+  name: landingpage-operator
+  apiGroup: rbac.authorization.k8s.io
+
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: landingpage-operator
+rules:
+  - apiGroups: [""]
+    resources:
+      - namespaces
+    verbs:
+      - list
+      - get
+      - watch
+      - update
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: landingpage-operator
+subjects:
+  - kind: ServiceAccount
+    name: landingpage-operator
+roleRef:
+  kind: Role
+  name: landingpage-operator
+  apiGroup: rbac.authorization.k8s.io

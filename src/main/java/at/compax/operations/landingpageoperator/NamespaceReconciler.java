@@ -8,9 +8,19 @@ import io.javaoperatorsdk.operator.api.reconciler.UpdateControl;
 
 @ControllerConfiguration
 public class NamespaceReconciler implements Reconciler<Namespace> {
+
+  public NamespaceReconciler() {
+
+  }
+
   @Override
   public UpdateControl<Namespace> reconcile(Namespace namespace, Context context) {
     System.out.println("reconcile namespace " + namespace.getMetadata().getName());
+    String url = namespace.getMetadata().getLabels().get("landingpage-url");
+    if (url != null) {
+
+      System.out.println("landingpage-url: " + url);
+    }
 
     return UpdateControl.noUpdate();
   }
