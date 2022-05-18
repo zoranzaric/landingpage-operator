@@ -18,8 +18,9 @@ public class NamespaceReconciler implements Reconciler<Namespace> {
     System.out.println("reconcile namespace " + namespace.getMetadata().getName());
     String url = namespace.getMetadata().getLabels().get("landingpage-url");
     if (url != null) {
-
       System.out.println("landingpage-url: " + url);
+    } else {
+      System.out.println("landingpage-url: [unset]");
     }
 
     return UpdateControl.noUpdate();
