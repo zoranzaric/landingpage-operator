@@ -1,0 +1,45 @@
+include:
+  - project: 'foundation/gitlab-ci-templates'
+    file: 'base-maven-gitlab-ci.yml'
+
+variables:
+  REGISTRY: repository.int.compax.at:5001
+  IMAGE: landingpage-operator
+
+
+stages:
+  - build
+  - image
+
+build:
+  image: $CI_REGISTRY/zaricz/cpx-maven:latest
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS clean package -DskipTests
+
+  artifacts:
+    paths:
+      - target/*.?ar
+
+build-image:
+  stage: image
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  only:
+    - master
+  before_script: []
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{" > /kaniko/.docker/config.json
+    - echo "\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}" >> /kaniko/.docker/config.json
+    - echo ",\"repository.int.compax.at:5001\":{\"auth\":\"$(printf "%s:%s" "coin" "Start1234" | base64 | tr -d '\n')\"}" >> /kaniko/.docker/config.json
+    - echo "}}" >> /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --skip-tls-verify
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+      --destination "$REGISTRY/$IMAGE:$CI_PIPELINE_ID"
+      --destination "$REGISTRY/$IMAGE:$(echo $CI_COMMIT_BRANCH | sed 's,/,-,g')"
