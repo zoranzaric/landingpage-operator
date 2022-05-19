@@ -14,12 +14,13 @@ public class NamespaceReconciler implements Reconciler<Namespace>, ResourceContr
 
   @Override
   public UpdateControl<Namespace> reconcile(Namespace namespace, Context context) {
-    System.out.println("reconcile namespace " + namespace.getMetadata().getName());
+    String namespaceName = namespace.getMetadata().getName();
+    System.out.println("[" + namespaceName + "] reconciling namespace");
     String url = namespace.getMetadata().getLabels().get("landingpage-url");
     if (url != null) {
-      System.out.println(namespace.getMetadata().getName() + " landingpage-url=" + url);
+      System.out.println("[" + namespaceName + "] landingpage-url=" + url);
     } else {
-      System.out.println(namespace.getMetadata().getName() + " landingpage-url-");
+      System.out.println("[" + namespaceName + "] landingpage-url-");
     }
 
     return UpdateControl.noUpdate();
