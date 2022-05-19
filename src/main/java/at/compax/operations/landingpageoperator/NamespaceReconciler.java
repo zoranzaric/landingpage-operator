@@ -7,7 +7,7 @@ import io.javaoperatorsdk.operator.api.reconciler.Reconciler;
 import io.javaoperatorsdk.operator.api.reconciler.UpdateControl;
 
 @ControllerConfiguration
-public class NamespaceReconciler implements Reconciler<Namespace>, ResourceContro {
+public class NamespaceReconciler implements Reconciler<Namespace> {
 
   public NamespaceReconciler() {
   }
